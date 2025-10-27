@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad Integradora - Azteca Tours</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Paleta Institucional -->
+    <!-- Application Structure Plan: La infografía se estructura en 10 secciones (Dilemas a-j). Cada sección inicia con respuesta breve, seguida de visualizaciones (gráficos, iconos, diagrama HTML/CSS, acordeones) manteniendo estilo institucional. Se unifica encabezado académico y título. Intro/conclusión personalizadas. -->
+    <!-- Visualization & Content Choices: Se reutilizan visualizaciones (Barra Comparativa, Donut TCO, Diagrama Stack OS) en secciones a y e. Se implementa acordeón para Desventajas (b) y Cronograma (i). Iconos y tarjetas mejoradas visualmente se usan para resumir puntos en otras secciones. NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-fondo-suave);
+            color: var(--color-texto-principal);
+        }
+        :root {
+            --color-guinda: #9F2241;
+            --color-dorado: #BC955C;
+            --color-verde-oscuro: #235B4E;
+            --color-texto-principal: #333333;
+            --color-texto-secundario: #98989A;
+            --color-fondo: #FFFFFF;
+            --color-fondo-suave: #F9F7F5;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; 
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 400px; }
+        }
+        
+        /* Flowchart styles */
+        .flowchart-container { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; margin-top: 2rem;}
+        .flowchart-item { background-color: var(--color-fondo); color: var(--color-texto-principal); padding: 1rem 1.5rem; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07); text-align: center; border-left: 5px solid var(--color-guinda); width: 80%; max-width: 400px; }
+        .flowchart-item h3 { color: var(--color-verde-oscuro); margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .flowchart-item p { font-size: 0.9rem; color: var(--color-texto-secundario); margin: 0; }
+        .flowchart-arrow { color: var(--color-dorado); font-size: 2rem; font-weight: bold; transform: rotate(90deg); }
+        
+        /* Apply Patria font to headings */
+        h1, h2, h3, h4 { font-family: 'Patria', 'Georgia', serif; } 
+        
+        h1 { /* Style for Activity Title within Academic Header */
+             font-size: 1.8rem; 
+             color: var(--color-fondo); 
+             margin: 1rem 0 0 0; 
+             padding-top: 1rem; 
+             border-top: 1px solid var(--color-dorado); 
+             display: inline-block;
+        } 
+        h2 { 
+            color: var(--color-guinda); 
+            margin-bottom: 0.5rem; 
+            font-size: 1.8rem; 
+            border-bottom: 2px solid var(--color-dorado); 
+            padding-bottom: 0.5rem;
+        } /* Section titles Guinda */
+        h3 { color: var(--color-verde-oscuro); margin-top: 1.5rem; margin-bottom: 1rem;} /* Subtitles Dark Green */
+        h4 { color: var(--color-guinda); } /* Emphasis Guinda */
+        
+        .text-muted { color: var(--color-texto-secundario); } /* Apply class for secondary text */
+        .bg-card { background-color: var(--color-fondo); } /* White background for cards */
+        .border-accent { border-color: var(--color-dorado); } /* Gold accent borders */
+        .border-main { border-color: var(--color-guinda); } /* Guinda main borders */
+        .border-secondary { border-color: var(--color-verde-oscuro); } /* Dark green secondary borders */
+
+        .dilemma-section {
+            background-color: var(--color-fondo);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+        }
+        
+        .brief-answer {
+             font-size: 1.1rem;
+             line-height: 1.7;
+             color: var(--color-texto-secundario);
+             margin-bottom: 2rem; 
+             font-style: italic;
+        }
+        
+        /* Enhanced intro/conclusion paragraphs */
+        .intro-paragraph, .conclusion-paragraph {
+             font-size: 1.15rem; /* Slightly larger */
+             line-height: 1.8;
+             color: var(--color-texto-principal); /* Use main text color */
+             margin-bottom: 3rem; 
+             text-align: justify;
+        }
+         .conclusion-paragraph {
+            margin-top: 3rem; /* Add space before final conclusion */
+         }
+
+
+        .point-card {
+            background-color: var(--color-fondo-suave);
+            border-left: 4px solid var(--color-dorado);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 0 4px 4px 0;
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+         .point-card:hover {
+            transform: translateX(5px);
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.05);
+         }
+        .point-card h4 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+             font-size: 1.1rem; 
+        }
+         .point-card h4 span.icon {
+            margin-right: 0.75rem;
+            font-size: 1.5rem;
+            color: var(--color-verde-oscuro);
+         }
+        .point-card p, .point-card ul {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--color-texto-secundario);
+            margin: 0;
+        }
+         .point-card ul {
+             list-style: none; 
+             padding-left: 0; 
+             margin-top: 0.5rem;
+         }
+         .point-card ul li {
+              position: relative;
+              padding-left: 1.5em; 
+              margin-bottom: 0.5em;
+         }
+          .point-card ul li::before {
+            content: '✓'; 
+            position: absolute;
+            left: 0;
+            color: var(--color-verde-oscuro);
+            font-weight: bold;
+         }
+
+        /* Accordion Styles (for Dilemma b & i) */
+        .accordion-button {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            padding: 1rem 1.5rem; 
+            background-color: var(--color-fondo-suave);
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s ease-out;
+            border-left: 4px solid var(--color-guinda); 
+             margin-bottom: 1rem; 
+        }
+         /* Specific style for Dilemma i button */
+         .accordion-button.timeline-btn {
+             border-left-color: var(--color-verde-oscuro);
+             background-color: var(--color-fondo); /* Slightly different background */
+         }
+         .accordion-button.timeline-btn h4 { color: var(--color-verde-oscuro); }
+
+        .accordion-button:hover {
+            background-color: #e0e0e0;
+        }
+        .accordion-button h4 { margin: 0; font-size: 1.1rem; display: flex; align-items: center;}
+         .accordion-button h4 span.icon { margin-right: 0.75rem; font-size: 1.5rem; color: var(--color-verde-oscuro); }
+        .accordion-button svg {
+            transition: transform 0.3s ease;
+            color: var(--color-texto-secundario);
+        }
+        .accordion-button.open svg {
+            transform: rotate(180deg);
+        }
+        .accordion-content {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, padding 0.5s ease-in-out, margin-top 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding: 0 1.5rem;
+            margin-top: -1rem; 
+            margin-left: 1rem; 
+            border-left: 2px dotted var(--color-dorado);
+             font-size: 1rem;
+             line-height: 1.7;
+             color: var(--color-texto-secundario);
+        }
+        .accordion-content.open {
+            max-height: 1000px; /* Adjust if needed, e.g., for timeline */
+            opacity: 1;
+            padding: 1rem 1.5rem 1.5rem 1.5rem;
+            margin-top: 0;
+        }
+
+        /* Timeline styles within Accordion i */
+        .timeline-item {
+            position: relative;
+            padding-left: 2.5rem; 
+            padding-bottom: 1.5rem;
+            border-left: 2px solid var(--color-dorado);
+        }
+         .timeline-item:last-child {
+             border-left: none; 
+             padding-bottom: 0;
+         }
+         .timeline-icon {
+            position: absolute;
+            left: -1rem; 
+            top: 0;
+            background-color: var(--color-fondo); 
+            border-radius: 50%;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: 2px solid var(--color-dorado);
+         }
+         .timeline-content h5 {
+             color: var(--color-verde-oscuro);
+             margin-top: 0.25rem;
+             margin-bottom: 0.5rem;
+             font-size: 1.1rem;
+         }
+         .timeline-content ul { list-style: disc; padding-left: 1.25rem; margin-top: 0.5rem; font-size: 0.95rem;}
+
+
+        footer { background-color: var(--color-guinda); color: var(--color-fondo); text-align: center; padding: 40px 20px; margin-top: 3rem;}
+        footer h2 { color: var(--color-fondo); font-size: 1.5rem; margin: 0 0 10px 0; font-family: 'Patria', 'Georgia', serif;}
+        footer p { margin: 5px 0; font-family: 'Inter', sans-serif;}
+
+         /* Academic Header Styles Integrated */
+         .academic-header-section {
+            background-color: var(--color-guinda);
+            color: var(--color-fondo);
+            padding: 30px 20px; 
+            text-align: center;
+            border-bottom: 5px solid var(--color-dorado); 
+            margin-bottom: 3rem; /* Space below header */
+        }
+        .academic-header-section h3 { /* University Name */
+            font-size: 1.5rem; 
+            color: var(--color-fondo);
+            margin: 0 0 15px 0;
+            font-family: 'Patria', 'Georgia', serif; /* Ensure Patria font */
+        }
+         .academic-header-section h1 { /* Activity Title */
+             font-size: 2rem; /* Make activity title larger */
+             color: var(--color-fondo); 
+             margin: 1rem 0 1rem 0; 
+             padding-top: 1rem; 
+             border-top: 1px solid var(--color-dorado); 
+             display: inline-block;
+             font-family: 'Patria', 'Georgia', serif; /* Ensure Patria font */
+        }
+        .academic-details p {
+            margin: 4px 0;
+            font-size: 1rem; 
+            font-family: 'Inter', sans-serif;
+            color: #f0f0f0; 
+        }
+        .academic-details p strong {
+            color: var(--color-dorado);
+            font-weight: normal; 
+        }
+
+    </style>
+</head>
+<body class="text-gray-800">
+
+     <!-- Unified Academic Header Section -->
+    <section class="academic-header-section">
+        <h3>Universidad Nacional Rosario Castellanos</h3>
+        <div class="academic-details">
+            <p><strong>Nombre:</strong> Juan Guillermo Martinez Flores</p>
+            <p><strong>Materia:</strong> ADAPTACIÓN DE SISTEMAS DE DISTRIBUCIÓN ABIERTA</p>
+            <p><strong>Docente:</strong> Francisco Jacob Avila Camacho</p>
+            <!-- Activity Title is now integrated here -->
+        </div>
+        <h1>Actividad integradora. Trabajo en equipo, eficientes resultados</h1>
+    </section>
+
+    <!-- Main Header Section REMOVED -->
+
+    <main class="container mx-auto px-6 py-8">
+        
+        <!-- Enhanced Personal Introduction -->
+        <p class="intro-paragraph">Al terminar este curso, me doy cuenta de los grandes retos que hay al querer adaptar la tecnología en el turismo. Hemos visto cómo funcionan sistemas como Amadeus, entendimos el problema real de Azteca Tours buscando opciones más baratas, y descubrimos todo lo que el <strong>Open Source</strong> puede ofrecer. Este trabajo final junta todo eso que aprendí. Aquí respondo a las preguntas clave que surgen al pensar en cambiar de tecnología, mostrando por qué el código abierto no es solo una opción más barata, sino una movida inteligente para que Azteca Tours pueda innovar y ser más eficiente.</p>
+
+        <!-- Dilema a -->
+        <section class="dilemma-section">
+            <h2>a) Beneficios del Open Source para Azteca Tours</h2>
+            <p class="brief-answer">Usar código abierto le ayudaría muchísimo a Azteca Tours. Principalmente, tendrían más libertad para adaptar el sistema, control total sobre su tecnología, podrían innovar más rápido y, sobre todo, ahorrarían bastante dinero comparado con lo que gastarían en licencias de Amadeus.</p>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h3 class="mb-4">Comparativa Clave:</h3>
+                     <div class="chart-container mb-6">
+                        <canvas id="dilemmaChart"></canvas>
+                    </div>
+                     <p class="text-xs text-muted text-center">Open Source (Red Hat) vs GDS Propietario.</p>
+                </div>
+                 <div>
+                     <h3 class="mb-4">Ventajas Principales:</h3>
+                     <div class="space-y-4">
+                         <div class="point-card"><h4><span class="icon">🔧</span>Flexibilidad y Control Total</h4></div>
+                         <div class="point-card"><h4><span class="icon">💰</span>Reducción TCO (Costo Total Propiedad)</h4></div>
+                         <div class="point-card"><h4><span class="icon">🚀</span>Innovación Acelerada</h4></div>
+                         <div class="point-card"><h4><span class="icon">📈</span>Escalabilidad Eficiente</h4></div>
+                     </div>
+                      <div class="mt-6 chart-container" style="height: 200px; max-height: 200px;">
+                        <canvas id="tcoChart"></canvas>
+                     </div>
+                      <p class="mt-2 text-xs text-muted text-center">Estimación del potencial ahorro en TCO.</p>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Dilema b -->
+        <section class="dilemma-section">
+            <h2>b) Desventajas del Open Source y por qué</h2>
+             <p class="brief-answer">Sí, hay desventajas. Principalmente, es más complejo técnicamente, requiere que alguien dentro (como Andrés) sepa manejarlo, hay que aprender a usar las herramientas y la seguridad depende más de la agencia. Pero todo esto se puede manejar con ayuda experta.</p>
+             <div class="accordion-container space-y-4 mt-6">
+                 <div>
+                    <button class="accordion-button">
+                        <h4><span class="icon">🧩</span>Complejidad Técnica</h4>
+                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Juntar y mantener varias herramientas necesita más conocimiento técnico interno. Configurar, actualizar y arreglar problemas puede ser más difícil que con una solución ya hecha.</p>
+                    </div>
+                 </div>
+                  <div>
+                    <button class="accordion-button">
+                        <h4><span class="icon">🎓</span>Curva de Aprendizaje</h4>
+                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p>El equipo técnico necesita tiempo y quizás capacitación para aprender bien a usar todo (OpenShift, Ansible, etc.).</p>
+                    </div>
+                 </div>
+                 <div>
+                    <button class="accordion-button border-main">
+                         <h4><span class="icon" style="color: var(--color-guinda);">🆘</span>Necesidad de Soporte Empresarial</h4>
+                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Depender solo de la ayuda gratuita de la comunidad no es seguro para un negocio. Pagar por soporte experto (como el de Red Hat) es <strong>fundamental</strong> para asegurar que todo funcione bien y sea seguro.</p>
+                    </div>
+                 </div>
+                 <div>
+                    <button class="accordion-button">
+                        <h4><span class="icon">🛡️</span>Responsabilidad de Seguridad</h4>
+                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                     <div class="accordion-content">
+                        <p>Al final, Azteca Tours es responsable de la seguridad de su sistema, aunque Red Hat da herramientas y ayuda con actualizaciones.</p>
+                    </div>
+                 </div>
+             </div>
+             <h3 class="mt-8">Mitigación:</h3>
+             <p class="text-muted">Con el soporte pagado, buena capacitación y planeando bien la parte técnica, estos problemas se pueden controlar.</p>
+        </section>
+
+        <!-- Dilema c -->
+        <section class="dilemma-section">
+            <h2>c) Recuperación de Costos del Código Abierto</h2>
+            <p class="brief-answer">Lo que se invierta se recupera ahorrando lo que ya no se paga a Amadeus, ganando más por cada viaje vendido (porque hay menos gastos fijos), siendo más eficientes y creando nuevas formas de ganar dinero con el sistema propio.</p>
+            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">📉</span>Ahorro Directo vs. GDS</h4>
+                    <p>Reducción drástica de costos recurrentes de licencias/transacciones.</p>
+                </div>
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">💸</span>Mayor Margen de Beneficio</h4>
+                    <p>Menos costos operativos = Mayor rentabilidad por cada venta.</p>
+                </div>
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">💡</span>Nuevos Ingresos / Eficiencia</h4>
+                    <p>Módulos a medida, integraciones directas, automatización de procesos.</p>
+                </div>
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">📊</span>Escalabilidad Controlada</h4>
+                    <p>Costos de crecimiento tecnológico más predecibles y optimizados.</p>
+                </div>
+            </div>
+        </section>
+
+         <!-- Dilema d -->
+        <section class="dilemma-section">
+            <h2>d) Medios para mantenerse activo en la Comunidad Open Source</h2>
+            <p class="brief-answer">Es importante participar en foros técnicos, plataformas como GitHub, eventos de Red Hat y grupos locales. La clave es compartir lo que se aprende y se crea, no solo usar lo que otros hacen.</p>
+            <div class="grid md:grid-cols-2 gap-8 mt-4">
+                 <div class="point-card border-secondary">
+                    <h4><span class="icon">💻</span>Canales Técnicos (Liderados por perfil Técnico)</h4>
+                    <ul>
+                        <li>Foros y Listas de Correo (proyectos OS, Red Hat).</li>
+                        <li>GitHub/GitLab (Contribuir código, reportar bugs).</li>
+                        <li>Blogs Técnicos y Conferencias.</li>
+                    </ul>
+                </div>
+                 <div class="point-card border-secondary">
+                    <h4><span class="icon">🌐</span>Canales Estratégicos (Todo el equipo)</h4>
+                     <ul>
+                        <li>Eventos Red Hat (Summit, Foros).</li>
+                        <li>Meetups Locales (Tecnología, Turismo).</li>
+                        <li>Redes Sociales Profesionales (LinkedIn).</li>
+                    </ul>
+                </div>
+            </div>
+             <h3 class="mt-8">Filosofía Clave:</h3>
+             <p class="text-muted"><strong>Contribuir</strong> (conocimiento, código, feedback), no solo consumir.</p>
+        </section>
+
+        <!-- Dilema e -->
+        <section class="dilemma-section">
+            <h2>e) Expertos indicados para instalación, soporte y mantenimiento</h2>
+            <p class="brief-answer">Se necesita al líder técnico interno para el día a día y la personalización, pero es <strong>indispensable</strong> el soporte pagado de Red Hat para asegurar que todo funcione bien, sea seguro y tener ayuda experta cuando se necesite.</p>
+             <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div>
+                     <h3 class="mb-4">Responsabilidades Clave:</h3>
+                     <div class="space-y-4">
+                         <div class="point-card">
+                            <h4><span class="icon">👨‍💻</span>Interno: Líder Técnico</h4>
+                            <p>Liderazgo, personalización, gestión diaria. Conoce el negocio.</p>
+                        </div>
+                        <div class="point-card border-main">
+                            <h4><span class="icon" style="color: var(--color-guinda);">⭐</span>Externo: Red Hat</h4>
+                            <p><strong>Indispensable</strong> para instalación experta, soporte 24/7, seguridad, estabilidad.</p>
+                        </div>
+                         <div class="point-card">
+                            <h4><span class="icon">🧑‍💼</span>Externo: Consultores (Opcional)</h4>
+                            <p>Expertise puntual para necesidades muy específicas.</p>
+                        </div>
+                     </div>
+                </div>
+                 <div>
+                    <h3 class="mb-4">El Ecosistema Red Hat Elegido:</h3>
+                    <div class="flowchart-container">
+                        <div class="flowchart-item"><h3>OpenShift (ROSA)</h3><p>Orquestación</p></div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-item"><h3>RHEL + Hardware</h3><p>Base Estable + Cómputo</p></div>
+                         <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-item"><h3>Data Grid / JBoss EAP / Fuse</h3><p>Datos Rápidos / Lógica / Integración</p></div>
+                         <div class="flowchart-arrow">↓</div>
+                         <div class="flowchart-item"><h3>Ansible / 3scale API</h3><p>Automatización / Gestión APIs</p></div>
+                    </div>
+                 </div>
+             </div>
+        </section>
+
+        <!-- Dilema f -->
+         <section class="dilemma-section">
+            <h2>f) Vínculo de conectividad, licencias y actualizaciones con OS</h2>
+            <p class="brief-answer">El modelo OS empresarial cambia las reglas: la conexión con otros sistemas es más fácil, no pagas licencias sino una suscripción por soporte, y las actualizaciones las controlas tú con ayuda del proveedor.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">🔗</span>Conectividad</h4>
+                    <p><strong>Ventaja OS:</strong> APIs abiertas facilitan integración.</p>
+                </div>
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">🌐</span>Accesibilidad</h4>
+                    <p><strong>Ventaja OS:</strong> Control total sobre experiencia web/móvil.</p>
+                </div>
+                 <div class="point-card border-secondary hover:shadow-lg">
+                    <h4><span class="icon" style="color: var(--color-verde-oscuro);">📄</span>"Licencias" = Suscripción</h4>
+                    <p><strong>Modelo Red Hat:</strong> Pago anual por soporte (predecible).</p>
+                </div>
+                 <div class="point-card border-secondary hover:shadow-lg">
+                    <h4><span class="icon" style="color: var(--color-verde-oscuro);">🔄</span>Actualizaciones</h4>
+                    <p><strong>Modelo Red Hat:</strong> Gestión interna apoyada por Red Hat.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dilema g -->
+         <section class="dilemma-section">
+            <h2>g) Plan de Modelo de Negocios: Innovación interna y externa</h2>
+             <p class="brief-answer">Se planea usar el sistema OS para ser más ágiles, mejorar procesos internos (automatizar, usar datos) y externos (mejorar web/app, marketing personalizado), todo bajo reglas claras de presupuesto, metas y seguridad.</p>
+             <div class="grid md:grid-cols-2 gap-8 mt-4">
+                 <div class="point-card">
+                    <h4><span class="icon">🏠</span>Innovación Interna</h4>
+                    <ul>
+                        <li>Desarrollo Rápido (Procesos Ágiles).</li>
+                        <li>Automatización (Eficiencia).</li>
+                        <li>Uso de Datos (Inteligencia de Negocio).</li>
+                         <li>Equipo Capacitado.</li>
+                    </ul>
+                </div>
+                 <div class="point-card">
+                    <h4><span class="icon">🌍</span>Innovación Externa</h4>
+                     <ul>
+                         <li>Mejor Experiencia Cliente (Personalización).</li>
+                         <li>Marketing Inteligente (Segmentación).</li>
+                         <li>Imagen Moderna (Marca).</li>
+                         <li>Ofertas Únicas (Proveedores).</li>
+                     </ul>
+                </div>
+             </div>
+              <h3 class="mt-8">Bases Administrativas (Artemisa):</h3>
+              <p class="text-muted">Presupuesto claro, KPIs, gobernanza de datos y seguridad.</p>
+        </section>
+
+        <!-- Dilema h -->
+         <section class="dilemma-section">
+            <h2>h) Mantenimiento del Balance de Utilidad Financiera</h2>
+             <p class="brief-answer">Se logra controlando bien los gastos de la nueva tecnología, usando esa tecnología para vender más o ser más eficientes, revisando las finanzas constantemente y asegurando que cada gasto en tecnología tenga sentido para el negocio.</p>
+             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">💰</span>Controlar Costos OS</h4>
+                    <p>Optimizar suscripción, recursos, priorizar desarrollo ROI.</p>
+                </div>
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">📈</span>Maximizar Ingresos</h4>
+                    <p>Precios, ventas adicionales, eficiencia operativa.</p>
+                </div>
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">📊</span>Monitorear Finanzas</h4>
+                    <p>Informes en tiempo real, análisis de rentabilidad.</p>
+                </div>
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">🎯</span>Alinear Estrategia</h4>
+                    <p>Inversión tecnológica ligada a objetivos de negocio.</p>
+                </div>
+             </div>
+              <h3 class="mt-8">Balance Sostenible:</h3>
+              <p class="text-muted">Asegurar que: Ahorros OS + Ingresos Habilitados > Costos OS Totales.</p>
+        </section>
+        
+        <!-- Dilema i -->
+         <section class="dilemma-section">
+            <h2>i) Plazo de uso del software elegido</h2>
+             <p class="brief-answer">Debe ser una estrategia a largo plazo, no una prueba. La inversión y los beneficios lo justifican. Se implementará por fases: empezar con lo básico (MVP) y luego ir añadiendo mejoras poco a poco.</p>
+            
+             <div class="accordion-container mt-6">
+                 <div>
+                    <button class="accordion-button timeline-btn">
+                        <h4><span class="icon">⏳</span>Cronograma de Implementación por Fases (Detalle)</h4>
+                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-icon" style="border-color: var(--color-guinda); color: var(--color-guinda);">1</div>
+                                <div class="timeline-content">
+                                    <h5>Fase 1: MVP (Producto Mínimo Viable) - Meses 1-6</h5>
+                                    <ul>
+                                        <li><strong>Infraestructura Base:</strong> Despliegue de OpenShift, RHEL, Bases de Datos (PostgreSQL).</li>
+                                        <li><strong>Core GDS:</strong> Funcionalidades esenciales de búsqueda de vuelos y hoteles (integración API básica).</li>
+                                        <li><strong>Reservas Básicas:</strong> Flujo simple de reserva y gestión inicial de PNRs.</li>
+                                        <li><strong>Gestión Clientes (CRM Básico):</strong> Módulo inicial para datos de contacto.</li>
+                                        <li><strong>Objetivo:</strong> Operar mínimamente y comenzar a reemplazar GDS costoso.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                             <div class="timeline-item">
+                                <div class="timeline-icon" style="border-color: var(--color-verde-oscuro); color: var(--color-verde-oscuro);">2</div>
+                                <div class="timeline-content">
+                                    <h5>Fase 2: Expansión Funcional - Meses 7-12</h5>
+                                     <ul>
+                                        <li><strong>Integraciones Avanzadas:</strong> Conexión directa con más proveedores (hoteles locales, transportes).</li>
+                                        <li><strong>Módulo de Tarifas:</strong> Integración del motor de tarifas (desplegado en RHEL).</li>
+                                        <li><strong>Gestión Pagos:</strong> Integración con pasarelas de pago.</li>
+                                        <li><strong>Portal Cliente Básico:</strong> Funciones de consulta de reservas.</li>
+                                        <li><strong>Reportes Iniciales:</strong> Módulo básico de reportes para Artemisa.</li>
+                                        <li><strong>Automatización Inicial (Ansible):</strong> Automatizar tareas repetitivas identificadas.</li>
+                                        <li><strong>Objetivo:</strong> Aumentar eficiencia y capacidades de venta.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                               <div class="timeline-icon" style="border-color: var(--color-dorado); color: var(--color-dorado);">3</div>
+                                <div class="timeline-content">
+                                    <h5>Fase 3: Optimización e Innovación - Mes 13+ (Continuo)</h5>
+                                     <ul>
+                                        <li><strong>Personalización y UX:</strong> Mejoras en interfaz web/móvil basadas en feedback.</li>
+                                        <li><strong>Inteligencia de Negocio:</strong> Módulo avanzado de análisis y reportes.</li>
+                                        <li><strong>Recomendaciones (IA):</strong> Implementación (potencial) de motor de recomendaciones.</li>
+                                        <li><strong>CRM Completo:</strong> Funcionalidades avanzadas de gestión de clientes y marketing.</li>
+                                        <li><strong>Optimización Continua:</strong> Refinamiento de rendimiento y costos de infraestructura.</li>
+                                        <li><strong>Nuevos Módulos:</strong> Desarrollo según necesidades emergentes del negocio.</li>
+                                        <li><strong>Objetivo:</strong> Diferenciación, maximizar ROI, innovación constante.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+             </div>
+             <h3 class="mt-8">Visión Estratégica:</h3>
+             <p class="text-muted">La plataforma OS es un activo que evoluciona con la agencia, no un software que se reemplaza.</p>
+        </section>
+
+         <!-- Dilema j -->
+         <section class="dilemma-section">
+            <h2>j) Conveniencia de crear una sociedad de negocios</h2>
+             <p class="brief-answer">Sí, es muy conveniente. Formalizar la sociedad entre Andrés, Alejandra y Artemisa une sus habilidades, asegura el compromiso de todos a largo plazo, define quién es dueño de la tecnología creada y facilita tomar decisiones importantes juntos.</p>
+             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                 <div class="point-card border-secondary hover:shadow-lg">
+                    <h4><span class="icon">🤝</span>Complementariedad Clave</h4>
+                    <p>Éxito depende de la sinergia Tech + Negocio + Finanzas.</p>
+                </div>
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">⏳</span>Compromiso Formal</h4>
+                    <p>Asegura dedicación a largo plazo de todos.</p>
+                </div>
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">🔐</span>Propiedad Intelectual</h4>
+                    <p>Define claramente propiedad del valioso software.</p>
+                </div>
+                  <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">🧭</span>Toma de Decisiones</h4>
+                    <p>Establece marco formal para decisiones estratégicas.</p>
+                </div>
+                  <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">🏦</span>Atracción de Inversión</h4>
+                    <p>Estructura sólida es más atractiva para capital futuro.</p>
+                </div>
+                 <div class="point-card hover:shadow-lg">
+                    <h4><span class="icon">🛡️</span>Mitigación de Riesgos</h4>
+                    <p>Define legalmente responsabilidades y beneficios.</p>
+                </div>
+             </div>
+              <h3 class="mt-8">Conclusión Clave:</h3>
+              <p class="text-muted">La sociedad une destinos y maximiza las posibilidades de éxito.</p>
+        </section>
+
+        <!-- Enhanced Personal Conclusion -->
+         <p class="conclusion-paragraph">Al final de este análisis, y del curso, me queda claro que la tecnología es mucho más que solo programas. Para Azteca Tours, elegir <strong>Open Source</strong> no es solo buscar algo más barato que Amadeus, es tomar el control de su futuro. Aprendí que aunque sea "código abierto", necesita una buena estrategia, gente que sepa (como Andrés), alguien que cuide el dinero (como Artemisa) y alguien que entienda a los clientes (como Alejandra). Usar herramientas como las de Red Hat da la seguridad que necesita un negocio serio. Lo más importante que me llevo es que el <strong>Open Source</strong> bien manejado te da libertad para innovar y adaptarte, algo clave en el turismo. Y que juntar las habilidades de cada uno en un equipo (ojalá formalizado como sociedad) es lo que realmente hace que un proyecto así funcione y tenga éxito a largo plazo.</p>
+
+    </main>
+    
+     <footer>
+        <h2>AZTECA TOURS</h2>
+        <p>Otro modo de ser humano y libre. Otro modo de viajar.</p>
+        <p>&copy; 2025 Azteca Tours. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+             // Function to process labels (wrap long labels)
+             function processLabels(labels) {
+                 return labels.map(label => {
+                     if (typeof label === 'string' && label.length > 16) { 
+                         const words = label.split(' ');
+                         const lines = [];
+                         let currentLine = '';
+                         words.forEach(word => {
+                             if ((currentLine + word).length > 16 && currentLine.length > 0) {
+                                 lines.push(currentLine.trim());
+                                 currentLine = word + ' ';
+                             } else {
+                                 currentLine += word + ' ';
+                             }
+                         });
+                         lines.push(currentLine.trim());
+                         return lines;
+                     }
+                     return label; 
+                 });
+             }
+
+             // Tooltip Title Callback
+             const tooltipTitleCallback = (tooltipItems) => {
+                 const item = tooltipItems[0];
+                 let label = item.chart.data.labels[item.dataIndex];
+                 if (Array.isArray(label)) { return label.join(' '); }
+                 return label || '';
+             };
+             
+              // Tooltip Label Callback for Dilemma Chart
+             const dilemmaTooltipLabelCallback = (context) => {
+                 let label = context.dataset.label || '';
+                 if (label) { label += ': '; }
+                 let value = context.parsed.y;
+                 if (value > 75) label += 'Muy Alto';
+                 else if (value > 50) label += 'Alto';
+                 else if (value > 25) label += 'Moderado';
+                 else label += 'Bajo';
+                 return label;
+             };
+
+             // Tooltip Label Callback for TCO Chart
+             const tcoTooltipLabelCallback = (context) => {
+                 let label = context.label || '';
+                 if (label) { label += ': '; }
+                 label += context.parsed + '%';
+                 return label;
+             };
+             
+            // Chart 1: Dilemma Chart (in Section a)
+            const ctxDilemma = document.getElementById('dilemmaChart');
+             if (ctxDilemma) { 
+                 Chart.defaults.font.family = "'Inter', sans-serif";
+                 new Chart(ctxDilemma.getContext('2d'), {
+                     type: 'bar',
+                     data: { 
+                         labels: processLabels(['Costo Licencia', 'Control Plataforma', 'Ritmo Innovación']),
+                         datasets: [{
+                             label: 'GDS Propietario (ej. Amadeus)',
+                             data: [90, 20, 30],
+                             backgroundColor: 'rgba(188, 149, 92, 0.7)', // Dorado
+                             borderColor: 'rgba(188, 149, 92, 1)',
+                             borderWidth: 1
+                         }, {
+                             label: 'Stack Open Source (Red Hat)',
+                             data: [30, 95, 85],
+                             backgroundColor: 'rgba(159, 34, 65, 0.7)', // Guinda
+                             borderColor: 'rgba(159, 34, 65, 1)',
+                             borderWidth: 1
+                         }]
+                     },
+                     options: { 
+                         responsive: true,
+                         maintainAspectRatio: false,
+                         scales: {
+                             y: { beginAtZero: true, max: 100, ticks: { color: 'var(--color-texto-secundario)' } },
+                             x: { ticks: { color: 'var(--color-texto-secundario)' } }
+                         },
+                         plugins: {
+                              legend: { labels: { color: 'var(--color-texto-principal)' } },
+                              tooltip: {
+                                  backgroundColor: 'var(--color-guinda)',
+                                  titleColor: 'var(--color-fondo)',
+                                  bodyColor: 'var(--color-fondo)',
+                                  callbacks: {
+                                     title: tooltipTitleCallback,
+                                     label: dilemmaTooltipLabelCallback
+                                 }
+                             }
+                         }
+                     }
+                 });
+             }
+
+            // Chart 2: TCO Savings (in Section a)
+            const ctxTCO = document.getElementById('tcoChart');
+             if (ctxTCO) { 
+                 new Chart(ctxTCO.getContext('2d'), {
+                     type: 'doughnut',
+                     data: { 
+                         labels: processLabels(['Ahorro Potencial TCO', 'Costo Operativo OS']),
+                         datasets: [{
+                             data: [70, 30], 
+                             backgroundColor: [
+                                 'rgba(35, 91, 78, 0.7)',  // Verde Oscuro
+                                 'rgba(159, 34, 65, 0.7)'  // Guinda
+                             ],
+                             borderColor: [
+                                 'rgba(35, 91, 78, 1)',
+                                  'rgba(159, 34, 65, 1)'
+                             ],
+                             borderWidth: 1
+                         }]
+                     },
+                     options: { 
+                         responsive: true,
+                         maintainAspectRatio: false,
+                         plugins: {
+                             legend: { display: false },
+                             tooltip: {
+                                  backgroundColor: 'var(--color-guinda)',
+                                  titleColor: 'var(--color-fondo)',
+                                  bodyColor: 'var(--color-fondo)',
+                                  callbacks: {
+                                     title: tooltipTitleCallback, 
+                                     label: tcoTooltipLabelCallback
+                                 }
+                             }
+                         }
+                     }
+                 });
+             }
+
+             // Accordion Logic (for Dilemma b & i)
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+            accordionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const isOpen = button.classList.contains('open');
+                    
+                    button.classList.toggle('open');
+                    content.classList.toggle('open');
+                });
+            });
+
+        });
+    </script>
+
+</body>
+</html>
+
