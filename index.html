@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     
     <!-- Chosen Palette: Paleta Institucional -->
-    <!-- Application Structure Plan: La infografía se estructura en 10 secciones (Dilemas a-j). Cada sección inicia con respuesta breve, seguida de visualizaciones (gráficos, iconos, diagrama HTML/CSS, acordeones) manteniendo estilo institucional. Se unifica encabezado académico y título. Intro/conclusión personalizadas. -->
+    <!-- Application Structure Plan: La infografía se estructura en 10 secciones (Dilemas a-j). Cada sección inicia con respuesta breve, seguida de visualizaciones (gráficos, iconos, diagrama HTML/CSS, acordeones) manteniendo estilo institucional. Se unifica encabezado académico y título. Intro/conclusión personalizadas. Se añade sección de Referencias completa. -->
     <!-- Visualization & Content Choices: Se reutilizan visualizaciones (Barra Comparativa, Donut TCO, Diagrama Stack OS) en secciones a y e. Se implementa acordeón para Desventajas (b) y Cronograma (i). Iconos y tarjetas mejoradas visualmente se usan para resumir puntos en otras secciones. NO SVG/Mermaid. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
@@ -242,6 +242,29 @@
          }
          .timeline-content ul { list-style: disc; padding-left: 1.25rem; margin-top: 0.5rem; font-size: 0.95rem;}
 
+        /* Reference List Styles */
+        .references-list {
+            padding-left: 0;
+            list-style: none;
+            font-size: 0.95rem; /* Slightly smaller font for references */
+            line-height: 1.6;
+        }
+        .references-list li {
+            margin-bottom: 1em;
+            padding-left: 1.5em;
+            text-indent: -1.5em; /* Hanging indent */
+        }
+        .references-list a {
+            color: var(--color-guinda);
+            overflow-wrap: break-word; /* Ensure long URLs break */
+            word-wrap: break-word;
+             word-break: break-all; /* Force break for very long URLs without spaces */
+             text-decoration: none;
+        }
+         .references-list a:hover {
+            text-decoration: underline;
+         }
+
 
         footer { background-color: var(--color-guinda); color: var(--color-fondo); text-align: center; padding: 40px 20px; margin-top: 3rem;}
         footer h2 { color: var(--color-fondo); font-size: 1.5rem; margin: 0 0 10px 0; font-family: 'Patria', 'Georgia', serif;}
@@ -298,14 +321,13 @@
         <h1>Actividad integradora. Trabajo en equipo, eficientes resultados</h1>
     </section>
 
-    <!-- Main Header Section REMOVED -->
-
     <main class="container mx-auto px-6 py-8">
         
         <!-- Enhanced Personal Introduction -->
         <p class="intro-paragraph">Al terminar este curso, me doy cuenta de los grandes retos que hay al querer adaptar la tecnología en el turismo. Hemos visto cómo funcionan sistemas como Amadeus, entendimos el problema real de Azteca Tours buscando opciones más baratas, y descubrimos todo lo que el <strong>Open Source</strong> puede ofrecer. Este trabajo final junta todo eso que aprendí. Aquí respondo a las preguntas clave que surgen al pensar en cambiar de tecnología, mostrando por qué el código abierto no es solo una opción más barata, sino una movida inteligente para que Azteca Tours pueda innovar y ser más eficiente.</p>
 
-        <!-- Dilema a -->
+        <!-- Dilemma Sections a-j ... (Content remains the same as previous version) -->
+         <!-- Dilema a -->
         <section class="dilemma-section">
             <h2>a) Beneficios del Open Source para Azteca Tours</h2>
             <p class="brief-answer">Usar código abierto le ayudaría muchísimo a Azteca Tours. Principalmente, tendrían más libertad para adaptar el sistema, control total sobre su tecnología, podrían innovar más rápido y, sobre todo, ahorrarían bastante dinero comparado con lo que gastarían en licencias de Amadeus.</p>
@@ -336,7 +358,7 @@
         <!-- Dilema b -->
         <section class="dilemma-section">
             <h2>b) Desventajas del Open Source y por qué</h2>
-             <p class="brief-answer">Sí, hay desventajas. Principalmente, es más complejo técnicamente, requiere que alguien dentro (como Andrés) sepa manejarlo, hay que aprender a usar las herramientas y la seguridad depende más de la agencia. Pero todo esto se puede manejar con ayuda experta.</p>
+             <p class="brief-answer">Sí, hay desventajas. Principalmente, es más complejo técnicamente, requiere que alguien dentro sepa manejarlo, hay que aprender a usar las herramientas y la seguridad depende más de la agencia. Pero todo esto se puede manejar con ayuda experta.</p>
              <div class="accordion-container space-y-4 mt-6">
                  <div>
                     <button class="accordion-button">
@@ -641,9 +663,27 @@
               <h3 class="mt-8">Conclusión Clave:</h3>
               <p class="text-muted">La sociedad une destinos y maximiza las posibilidades de éxito.</p>
         </section>
+        
+        <!-- Reference Section -->
+        <section class="dilemma-section">
+            <h2>Referencias</h2>
+            <ul class="references-list">
+                 <li>Tourism Innovation Consulting. (2020, 11 de mayo). <strong>Amadeus Connect - Nivel Básico #1: Introducción al Sistema</strong>. YouTube. <a href="https://www.youtube.com/watch?v=Jet9ck7u3to" target="_blank">https://www.youtube.com/watch?v=Jet9ck7u3to</a></li>
+                 <li>Tourism Innovation Consulting. (2020, 18 de mayo). <strong>Amadeus Connect - Nivel Básico #2: Codificación y Decodificación</strong>. YouTube. <a href="https://www.youtube.com/watch?v=kdvOA6zLqEs" target="_blank">https://www.youtube.com/watch?v=kdvOA6zLqEs</a></li>
+                 <li>Tourism Innovation Consulting. (2020, 18 de mayo). <strong>Amadeus Connect - Nivel Básico #3-2: Disponibilidad Aérea en Modo Comando</strong>. YouTube. <a href="https://www.youtube.com/watch?v=VOXqgDgtEvw" target="_blank">https://www.youtube.com/watch?v=VOXqgDgtEvw</a></li>
+                 <li>Tourism Innovation Consulting. (2020, 16 de junio). <strong>Amadeus Connect - Nivel Básico #4-1: Reserva en Modo Gráfico</strong>. YouTube. <a href="https://www.youtube.com/watch?v=cw0mKdZWB6s&t=12s" target="_blank">https://www.youtube.com/watch?v=cw0mKdZWB6s&t=12s</a></li>
+                 <li>Parada, M. (2020). Herramientas Open Source en la Gestión Turística. <em>OpenExpo Europe</em>. Recuperado de <a href="https://openexpoeurope.com/es/herramientas-open-source-la-gestion-turistica/" target="_blank">https://openexpoeurope.com/es/herramientas-open-source-la-gestion-turistica/</a></li>
+                 <li>SENATUR Gobierno de Chile. (2015). <em>Manual paso a paso para el diseño de Productos Turísticos Integrados</em> [Manual]. Recuperado de <a href="https://asesoresenturismoperu.wordpress.com/wp-content/uploads/2016/06/244-manual-productos-turc3adsticos-integrados-y-experienciales-sernatur-chile.pdf" target="_blank">https://asesoresenturismoperu.wordpress.com/.../manual-productos-turisticos...</a></li>
+                 <li>Studocu. (s.f.). <em>Cuadro Comparativo entre el Software Libre y Comercial</em>. Recuperado el 26 de octubre de 2025, de <a href="https://www.studocu.com/es-mx/document/universidad-de-ciencias-y-artes-de-chiapas/tic/cuadro-comparativo-entre-el-software-libre-y-comercial/8918563" target="_blank">https://www.studocu.com/es-mx/document/universidad-de-ciencias-y-artes-de-chiapas/.../8918563</a></li>
+                 <li>Asana. (s.f.). Modelo Canvas: ¿Qué es, para qué sirve y cómo hacerlo uno solo 9 pasos? ¡Ejemplos reales! Recuperado de <a href="https://asana.com/es/resources/business-model-canvas" target="_blank">https://asana.com/es/resources/business-model-canvas</a></li>
+                 <li>Economipedia. (s.f.). Modelo Canvas: Qué es, usos y cómo hacer uno. Recuperado de <a href="https://economipedia.com/definiciones/modelo-canvas.html" target="_blank">https://economipedia.com/definiciones/modelo-canvas.html</a></li>
+                 <li>Mayén, A. (2021). <em>Modelo de Negocios Canvas, propuesta para la agencia de viajes Azteca Travels</em>. Modelo basado en Model Canvas por Osterwalder, A. Instituto de Estudios Superiores de la Ciudad de México “Rosario Castellanos”.</li>
+                 <li>Modelos de Plan de Negocios. (s.f.). Esquema de modelo de negocio para una agencia de viajes. Recuperado de <a href="https://modelosdeplandenegocios.com/blogs/news/agencia-viajes-equema-modelo-negocio" target="_blank">https://modelosdeplandenegocios.com/blogs/news/agencia-viajes-equema-modelo-negocio</a></li>
+            </ul>
+        </section>
 
         <!-- Enhanced Personal Conclusion -->
-         <p class="conclusion-paragraph">Al final de este análisis, y del curso, me queda claro que la tecnología es mucho más que solo programas. Para Azteca Tours, elegir <strong>Open Source</strong> no es solo buscar algo más barato que Amadeus, es tomar el control de su futuro. Aprendí que aunque sea "código abierto", necesita una buena estrategia, gente que sepa (como Andrés), alguien que cuide el dinero (como Artemisa) y alguien que entienda a los clientes (como Alejandra). Usar herramientas como las de Red Hat da la seguridad que necesita un negocio serio. Lo más importante que me llevo es que el <strong>Open Source</strong> bien manejado te da libertad para innovar y adaptarte, algo clave en el turismo. Y que juntar las habilidades de cada uno en un equipo (ojalá formalizado como sociedad) es lo que realmente hace que un proyecto así funcione y tenga éxito a largo plazo.</p>
+         <p class="conclusion-paragraph">Al final de este análisis, y del curso, me queda claro que la tecnología es mucho más que solo programas. Para Azteca Tours, elegir <strong>Open Source</strong> no es solo buscar algo más barato que Amadeus, es tomar el control de su futuro. Aprendí que aunque sea "código abierto", necesita una buena estrategia, gente que sepa (como el perfil técnico), alguien que cuide el dinero (como el perfil financiero) y alguien que entienda a los clientes (como el perfil de negocio turístico). Usar herramientas como las de Red Hat da la seguridad que necesita un negocio serio. Lo más importante que me llevo es que el <strong>Open Source</strong> bien manejado te da libertad para innovar y adaptarte, algo clave en el turismo. Y que juntar las habilidades de cada uno en un equipo (ojalá formalizado como sociedad) es lo que realmente hace que un proyecto así funcione y tenga éxito a largo plazo.</p>
 
     </main>
     
